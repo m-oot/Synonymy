@@ -1,0 +1,2 @@
+# Synonymy
+Alexa Skill Game
