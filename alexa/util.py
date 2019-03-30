@@ -63,21 +63,31 @@ def get_answer(attr, item):
 def ask_question(handler_input):
     # (HandlerInput) -> None
     """Get a random word and synonyms, return question about it."""
-    random_word_synonyms = get_random_word()
+    next_question = get_random_word()
 
-    random_word = random_word_synonyms[0]
-    synonyms = list(random_word_synonyms[1])
+    random_word = next_question[0][0]
+    pos =next_question[0][1]
+    synonyms = list(next_question[1])
+    definition = next_question[2]
+
 
     attr = handler_input.attributes_manager.session_attributes
 
-    attr["quiz_item"] = random_word
-    attr["quiz_attr"] = synonyms
+    attr["current_word"] = random_word
+    attr["current_pos"] = pos
+    attr["current_synonyms"] = synonyms
+    attr["current_definition"] = definition
+
     attr["counter"] += 1
 
     handler_input.attributes_manager.session_attributes = attr
 
     return get_question(attr["counter"], random_word)
 
+def getDefinitionSpeech(word, pos, definition):
+    spelled_as = "<say-as interpret-as='spell-out'>{}</say-as>".format(word)
+    return "{}, {}. Spelled as {}. The definition of {} is {}.".format(
+        word, pos, spelled_as, word, definition)
 
 def get_speechcon(correct_answer):
     """Return speechcon corresponding to the boolean answer correctness."""
@@ -99,6 +109,7 @@ def compare_slots(slots, value):
     """Compare slot value to the value provided."""
     for _, slot in six.iteritems(slots):
         if slot.value is not None:
+            #TODO: remove stop words and stem/lemmatize response and answer
             return slot.value.lower() in value
     else:
         return False

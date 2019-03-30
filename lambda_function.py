@@ -130,10 +130,17 @@ class DefinitionHandler(AbstractRequestHandler):
         response_builder = handler_input.response_builder
         attr = handler_input.attributes_manager.session_attributes
 
-        item = attr["quiz_item"]
+        word = attr["current_word"]
+        pos = attr["current_pos"]
+        definition = attr["current_definition"]
 
-        speech = "You have requested a definition of {}".format(item)
-        return response_builder.speak(speech).ask("").response
+
+        speech = util.getDefinitionSpeech(word, pos, definition)
+        
+        response_builder.speak(speech)
+        response_builder.ask("")
+
+        return response_builder.response
 
 
 class QuizAnswerHandler(AbstractRequestHandler):
@@ -150,8 +157,8 @@ class QuizAnswerHandler(AbstractRequestHandler):
         attr = handler_input.attributes_manager.session_attributes
         response_builder = handler_input.response_builder
 
-        item = attr["quiz_item"]
-        item_attr = attr["quiz_attr"]
+        item = attr["current_word"]
+        item_attr = attr["current_synonyms"]
 
         is_ans_correct = util.compare_token_or_slots(
             handler_input=handler_input,
@@ -175,8 +182,8 @@ class QuizAnswerHandler(AbstractRequestHandler):
             reprompt = question
 
             # Update item and item_attr for next question
-            item = attr["quiz_item"]
-            item_attr = attr["quiz_attr"]
+            item = attr["current_word"]
+            item_attr = attr["current_synonyms"]
 
             return response_builder.speak(speech).ask(reprompt).response
         else:

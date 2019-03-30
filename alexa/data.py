@@ -5,7 +5,7 @@ SKILL_TITLE = "Synonymy"
 WELCOME_MESSAGE = ("Welcome to synonymy, a game where I will tell you a "
                     "word and you try to tell me a synonym of that word. Say start a quiz if you are ready.")
 
-START_QUIZ_MESSAGE = "OK Mr thesaurus, Let's begin."
+START_QUIZ_MESSAGE = "OK, Let's begin."
 
 EXIT_SKILL_MESSAGE = ("Thank you for playing synonymy. "
                       "Let's play again soon!")
